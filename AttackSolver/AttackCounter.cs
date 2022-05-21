@@ -7,6 +7,8 @@ namespace AttackSolver
     {
         public int CountUnderAttack(ChessmanType cmType, Size boardSize, Point startCoords, Point[] obstacles)
         {
+            var board = new Board(boardSize, obstacles);
+
             switch (cmType)
             {
                 case ChessmanType.Rook:
@@ -16,12 +18,12 @@ namespace AttackSolver
 
                     break;
                 case ChessmanType.Knight:
-
-                    break;
+                    return new Knight(board, startCoords).GetMoves().Count;
                 default:
                     break;
             }
             return 0;
         }
+
     }
 }
