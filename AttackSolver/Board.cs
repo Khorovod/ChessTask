@@ -32,7 +32,8 @@ namespace AttackSolver
         {
             foreach (var obstacle in obstacles)
             {
-                Grid[obstacle.X, obstacle.Y].IsObstacle = true;
+                if (!(obstacle.X-1 < 0 || obstacle.X-1 >= Grid.GetLength(0) || obstacle.Y-1 < 0 || obstacle.Y-1 >= Grid.GetLength(1)))
+                    Grid[obstacle.X-1, obstacle.Y-1].IsObstacle = true;
             }
         }
 

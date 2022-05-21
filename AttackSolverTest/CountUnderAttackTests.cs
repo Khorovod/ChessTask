@@ -35,22 +35,41 @@ namespace AttackSolverTest
 
                 // Bishop - slon
                 res = inst.CountUnderAttack(ChessmanType.Bishop, new Size(4, 5), new Point(2, 2),
-                    new [] {new Point(3, 3), new Point(1, 3), });
+                    new [] {new Point(1, 2), new Point(4, 5), });
                 Assert.Equal(3, res);
             }
         }
 
         [Fact]
-        public void StartTest()
+        public void KnightCenter()
         {
             var inst = FindImplementations().First();
 
-            var res = inst.CountUnderAttack(ChessmanType.Rook, new Size(4, 4), new Point(2, 2),
-                new[] { new Point(2, 4), new Point(4, 2) });
-            Assert.Equal(4, res);
+            var res = inst.CountUnderAttack(ChessmanType.Knight, new Size(5, 5), new Point(3, 3),
+                new[] { new Point(1, 2), new Point(4, 5) });
+            Assert.Equal(6, res);
 
         }
+        [Fact]
+        public void KnightCornerIncorrectObstacle()
+        {
+            var inst = FindImplementations().First();
 
+            var res = inst.CountUnderAttack(ChessmanType.Knight, new Size(3, 4), new Point(1, 1),
+                new[] { new Point(1, 2), new Point(4, 5), new Point(3, 2) });
+            Assert.Equal(1, res);
+
+        }
+        [Fact]
+        public void KnightCornerObstacleIsStart()
+        {
+            var inst = FindImplementations().First();
+
+            var res = inst.CountUnderAttack(ChessmanType.Knight, new Size(4, 4), new Point(1, 2),
+                new[] { new Point(1, 2) });
+            Assert.Equal(3, res);
+
+        }
         IList<IAttackCounter> FindImplementations()
         {
             return AppDomain.CurrentDomain.GetAssemblies()
