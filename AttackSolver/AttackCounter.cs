@@ -1,5 +1,6 @@
 ﻿using Interface;
 using System.Drawing;
+using System;
 
 namespace AttackSolver
 {
@@ -12,17 +13,14 @@ namespace AttackSolver
             switch (cmType)
             {
                 case ChessmanType.Rook:
-
-                    break;
+                    return new Rook(board, startCoords).GetMoves().Count;
                 case ChessmanType.Bishop:
-
-                    break;
+                    return new Bishop(board, startCoords).GetMoves().Count;
                 case ChessmanType.Knight:
                     return new Knight(board, startCoords).GetMoves().Count;
                 default:
-                    break;
+                    throw new NotImplementedException($"'{cmType}' not supported yet");
             }
-            return 0;
         }
 
     }

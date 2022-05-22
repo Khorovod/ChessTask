@@ -70,6 +70,59 @@ namespace AttackSolverTest
             Assert.Equal(3, res);
 
         }
+        [Fact]
+        public void KnightZero()
+        {
+            var inst = FindImplementations().First();
+
+            var res = inst.CountUnderAttack(ChessmanType.Knight, new Size(2, 2), new Point(1, 1),
+                new[] { new Point(1, 1) });
+            Assert.Equal(0, res);
+
+        }
+
+        [Fact]
+        public void RookCenter()
+        {
+            var inst = FindImplementations().First();
+
+            var res = inst.CountUnderAttack(ChessmanType.Rook, new Size(4, 4), new Point(2, 2),
+                new[] { new Point(1, 1) });
+            Assert.Equal(6, res);
+
+        }
+        [Fact]
+        public void RookCenterWObstacle()
+        {
+            var inst = FindImplementations().First();
+
+            var res = inst.CountUnderAttack(ChessmanType.Rook, new Size(4, 4), new Point(2, 2),
+                new[] { new Point(4, 2) });
+            Assert.Equal(5, res);
+
+        }
+        [Fact]
+        public void RookCenterWObstaclesAround()
+        {
+            var inst = FindImplementations().First();
+
+            var res = inst.CountUnderAttack(ChessmanType.Rook, new Size(5, 5), new Point(3, 3),
+                new[] { new Point(1, 3), new Point(3, 1), new Point(3, 5), new Point(5, 3) });
+            Assert.Equal(4, res);
+
+        }
+        [Fact]
+        public void RookCorner()
+        {
+            var inst = FindImplementations().First();
+
+            var res = inst.CountUnderAttack(ChessmanType.Rook, new Size(3, 2), new Point(3, 2),
+                new[] { new Point(2, 1) });
+            Assert.Equal(3, res);
+
+        }
+
+
         IList<IAttackCounter> FindImplementations()
         {
             return AppDomain.CurrentDomain.GetAssemblies()

@@ -7,7 +7,6 @@ namespace AttackSolver
 {
     public class Board
     {
-
         public Board(Size boardSize, IEnumerable<Point> obstacles )
         {
             CreateBoard(boardSize);
