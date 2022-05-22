@@ -6,14 +6,16 @@ using System.Text;
 
 namespace AttackSolver
 {
-    public class Bishop : ChessFigure, IChessman
+    public class Bishop : IChessman
     {
         private readonly Point _start;
+        private readonly Board _board;
 
-        public Bishop(Board board, Point start) : base(board)
+        public Bishop(Board board, Point start)
         {
             _start.X = start.X - 1;
             _start.Y = start.Y - 1;
+            _board = board;
         }
 
         public List<Point> GetMoves()

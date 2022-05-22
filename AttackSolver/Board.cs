@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using Interface;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 
 namespace AttackSolver
@@ -31,10 +29,25 @@ namespace AttackSolver
         {
             foreach (var obstacle in obstacles)
             {
-                if (!(obstacle.X-1 < 0 || obstacle.X-1 >= Grid.GetLength(0) || obstacle.Y-1 < 0 || obstacle.Y-1 >= Grid.GetLength(1)))
+                if (!(IsValidPoint(obstacle.X, obstacle.Y)))
                     Grid[obstacle.X-1, obstacle.Y-1].IsObstacle = true;
             }
         }
 
+        public bool IsValidPoint(int x, int y)
+        {
+            if (x < 0 || x >= Grid.GetLength(0) || y < 0 || y >= Grid.GetLength(1))
+            {
+                return false;
+            }
+            else if (Grid[x, y].IsObstacle)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
     }
 }
