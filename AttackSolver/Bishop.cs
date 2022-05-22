@@ -1,7 +1,6 @@
 ﻿using Interface;
 using System.Collections.Generic;
 using System.Drawing;
-using System;
 
 namespace AttackSolver
 {

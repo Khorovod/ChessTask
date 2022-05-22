@@ -9,9 +9,8 @@ namespace AttackSolver
         public Board(Size boardSize, IEnumerable<Point> obstacles )
         {
             CreateBoard(boardSize);
-            FillBoard(obstacles);
+            FillBoardWithObstacles(obstacles);
         }
-
         public Cell[,] Grid { get; set; }
 
         void CreateBoard(Size boardSize)
@@ -19,21 +18,24 @@ namespace AttackSolver
             if(boardSize != null && !boardSize.IsEmpty && boardSize.Width > 0 && boardSize.Height > 0)
             {
                 Grid = new Cell[boardSize.Width, boardSize.Height];
-                for (int i = 0; i < boardSize.Width; i++)
-                {
-                    for (int j = 0; j < boardSize.Height; j++)
-                    {
-                        Grid[i, j] = new Cell(i, j);
-                    }
-                }
+                InitCells(boardSize);
             }
             else
             {
                 throw new ArgumentException("invalid board size");
             }
         }
-
-        void FillBoard(IEnumerable<Point> obstacles)
+        void InitCells(Size boardSize)
+        {
+            for (int i = 0; i < boardSize.Width; i++)
+            {
+                for (int j = 0; j < boardSize.Height; j++)
+                {
+                    Grid[i, j] = new Cell(i, j);
+                }
+            }
+        }
+        void FillBoardWithObstacles(IEnumerable<Point> obstacles)
         {
             foreach (var obstacle in obstacles)
             {
@@ -41,6 +43,7 @@ namespace AttackSolver
                     Grid[obstacle.X-1, obstacle.Y-1].IsObstacle = true;
             }
         }
+
 
         public bool IsValidPoint(int x, int y)
         {
