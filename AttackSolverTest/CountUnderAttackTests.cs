@@ -18,6 +18,8 @@ namespace AttackSolverTest
         }
 
         [Fact]
+        [Trait("Figure", "Rook")]
+        [Trait("Figure", "Bishop")]
         public void Test1()
         {
             var insts = FindImplementations();
@@ -41,6 +43,7 @@ namespace AttackSolverTest
         }
 
         [Fact]
+        [Trait("Board", "Size")]
         public void BoardIsZeroSize()
         {
             var inst = FindImplementations().Single();
@@ -58,6 +61,7 @@ namespace AttackSolverTest
 
         }
         [Fact]
+        [Trait("Board", "Size")]
         public void BoardSizeIsInvalid()
         {
             var inst = FindImplementations().Single();
@@ -72,6 +76,7 @@ namespace AttackSolverTest
             }
         }
         [Fact]
+        [Trait("StartPoint", "Point")]
         public void StartPositionInvalid()
         {
             var inst = FindImplementations().Single();
@@ -87,6 +92,7 @@ namespace AttackSolverTest
             }
         }
         [Fact]
+        [Trait("Figure", "Knight")]
         public void KnightCenter()
         {
             var inst = FindImplementations().Single();
@@ -97,6 +103,7 @@ namespace AttackSolverTest
 
         }
         [Fact]
+        [Trait("Figure", "Knight")]
         public void KnightCornerIncorrectObstacle()
         {
             var inst = FindImplementations().Single();
@@ -107,6 +114,7 @@ namespace AttackSolverTest
 
         }
         [Fact]
+        [Trait("Figure", "Knight")]
         public void KnightCornerObstacleIsStart()
         {
             var inst = FindImplementations().Single();
@@ -117,6 +125,7 @@ namespace AttackSolverTest
 
         }
         [Fact]
+        [Trait("Figure", "Knight")]
         public void KnightZero()
         {
             var inst = FindImplementations().Single();
@@ -129,8 +138,24 @@ namespace AttackSolverTest
             Assert.Equal(0, res);
 
         }
+        //[Fact]
+        [Fact(Skip = "too slow")]
+        [Trait("Figure", "Knight")]
+        public void KnigthBig()
+        {
+            var inst = FindImplementations().Single();
+
+            var size = new Size(10000, 10000);
+            var start = new Point(5000, 5000);
+            var obstacles = new[] { new Point(10, 13), new Point(8, 13), new Point(8, 15), new Point(9, 15) };
+
+            var res = inst.CountUnderAttack(ChessmanType.Knight, size, start, obstacles);
+            Assert.Equal(8, res);
+
+        }
 
         [Fact]
+        [Trait("Figure", "Rook")]
         public void RookCenter()
         {
             var inst = FindImplementations().Single();
@@ -144,19 +169,21 @@ namespace AttackSolverTest
 
         }
         [Fact]
+        [Trait("Figure", "Rook")]
         public void RookCenterWObstacle()
         {
             var inst = FindImplementations().Single();
 
             var size = new Size(4, 4);
             var start = new Point(2, 2);
-            var obstacles = new[] { new Point(4, 2)};
+            var obstacles = new[] { new Point(4, 2) };
 
             var res = inst.CountUnderAttack(ChessmanType.Rook, size, start, obstacles);
             Assert.Equal(5, res);
 
         }
         [Fact]
+        [Trait("Figure", "Rook")]
         public void RookCenterWObstaclesAround()
         {
             var inst = FindImplementations().Single();
@@ -170,13 +197,14 @@ namespace AttackSolverTest
 
         }
         [Fact]
+        [Trait("Figure", "Rook")]
         public void RookCorner()
         {
             var inst = FindImplementations().Single();
 
             var size = new Size(3, 2);
             var start = new Point(3, 2);
-            var obstacles = new[] { new Point(2, 1)};
+            var obstacles = new[] { new Point(2, 1) };
 
             var res = inst.CountUnderAttack(ChessmanType.Rook, size, start, obstacles);
             Assert.Equal(3, res);
@@ -184,20 +212,21 @@ namespace AttackSolverTest
         }
 
         [Fact]
+        [Trait("Figure", "Bishop")]
         public void BishopCenter()
         {
             var inst = FindImplementations().Single();
 
             var size = new Size(5, 5);
             var start = new Point(3, 3);
-            var obstacles = new[] { new Point(3, 1), new Point(4,3), new Point(3,4) };
+            var obstacles = new[] { new Point(3, 1), new Point(4, 3), new Point(3, 4) };
 
             var res = inst.CountUnderAttack(ChessmanType.Bishop, size, start, obstacles);
             Assert.Equal(8, res);
 
         }
-
         [Fact]
+        [Trait("Figure", "Bishop")]
         public void BishopCorner()
         {
             var inst = FindImplementations().Single();
@@ -211,6 +240,7 @@ namespace AttackSolverTest
 
         }
         [Fact]
+        [Trait("Figure", "Bishop")]
         public void BishopCornerObstacles()
         {
             var inst = FindImplementations().Single();
@@ -223,17 +253,19 @@ namespace AttackSolverTest
             Assert.Equal(1, res);
 
         }
-        [Fact]
+        //[Fact]
+        [Fact(Skip = "too slow")]
+        [Trait("Figure", "Bishop")]
         public void BishopBig()
         {
             var inst = FindImplementations().Single();
 
-            var size = new Size(100000, 100000);
-            var start = new Point(100000, 100000);
+            var size = new Size(10000, 10000);
+            var start = new Point(5000, 5000);
             var obstacles = new[] { new Point(10, 13), new Point(8, 13), new Point(8, 15), new Point(9, 15) };
 
             var res = inst.CountUnderAttack(ChessmanType.Bishop, size, start, obstacles);
-            Assert.Equal(1, res);
+            Assert.Equal(19997, res);
 
         }
 
@@ -242,7 +274,7 @@ namespace AttackSolverTest
             return AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(s => s.GetTypes())
                 .Where(mytype => mytype.GetInterfaces().Contains(typeof(IAttackCounter)))
-                .Select(type => (IAttackCounter) Activator.CreateInstance(type)).ToList();
+                .Select(type => (IAttackCounter)Activator.CreateInstance(type)).ToList();
         }
     }
 }
