@@ -13,11 +13,11 @@ namespace AttackSolver
 
         public Rook(Board board, Point start)
         {
+            ValidatePoint.GraterThanZero(start);
             _start.X = start.X - 1;
             _start.Y = start.Y - 1;
             _board = board;
         }
-
 
         public List<Point> GetMoves()
         {

@@ -30,20 +30,66 @@ namespace AttackSolverTest
                 output.WriteLine("Testing " + inst.GetType().FullName);
                 // Rook - ladja
                 var res = inst.CountUnderAttack(ChessmanType.Rook, new Size(3, 2), new Point(1, 1),
-                    new [] { new Point(2, 2), new Point(1, 3)  });
+                    new[] { new Point(2, 2), new Point(3, 1) });
                 Assert.Equal(2, res);
 
                 // Bishop - slon
                 res = inst.CountUnderAttack(ChessmanType.Bishop, new Size(4, 5), new Point(2, 2),
-                    new [] {new Point(1, 2), new Point(4, 5), });
-                Assert.Equal(3, res);
+                    new[] { new Point(3, 3), new Point(1, 3), });
+                Assert.Equal(2, res);
             }
         }
 
         [Fact]
+        public void BoardIsZeroSize()
+        {
+            var inst = FindImplementations().Single();
+
+            try
+            {
+                var res = inst.CountUnderAttack(ChessmanType.Bishop, new Size(0, 0), new Point(3, 2),
+                        new[] { new Point(2, 1) });
+            }
+            catch (ArgumentException ex)
+            {
+                Assert.Equal("invalid board size", ex.Message);
+            }
+
+
+        }
+        [Fact]
+        public void BoardSizeIsInvalid()
+        {
+            var inst = FindImplementations().Single();
+            try
+            {
+                var res = inst.CountUnderAttack(ChessmanType.Bishop, new Size(-4, -4), new Point(3, 2),
+                        new[] { new Point(2, 1) });
+            }
+            catch (ArgumentException ex)
+            {
+                Assert.Equal("invalid board size", ex.Message);
+            }
+        }
+        [Fact]
+        public void StartPositionInvalid()
+        {
+            var inst = FindImplementations().Single();
+            var startPoint = new Point(0, -2);
+            try
+            {
+                var res = inst.CountUnderAttack(ChessmanType.Knight, new Size(4, 4), startPoint,
+                    new[] { new Point(2, 1) });
+            }
+            catch (ArgumentException ex)
+            {
+                Assert.Equal($"invalid point '{startPoint}'", ex.Message);
+            }
+        }
+        [Fact]
         public void KnightCenter()
         {
-            var inst = FindImplementations().First();
+            var inst = FindImplementations().Single();
 
             var res = inst.CountUnderAttack(ChessmanType.Knight, new Size(5, 5), new Point(3, 3),
                 new[] { new Point(1, 2), new Point(4, 5) });
@@ -53,7 +99,7 @@ namespace AttackSolverTest
         [Fact]
         public void KnightCornerIncorrectObstacle()
         {
-            var inst = FindImplementations().First();
+            var inst = FindImplementations().Single();
 
             var res = inst.CountUnderAttack(ChessmanType.Knight, new Size(3, 4), new Point(1, 1),
                 new[] { new Point(1, 2), new Point(4, 5), new Point(3, 2) });
@@ -63,7 +109,7 @@ namespace AttackSolverTest
         [Fact]
         public void KnightCornerObstacleIsStart()
         {
-            var inst = FindImplementations().First();
+            var inst = FindImplementations().Single();
 
             var res = inst.CountUnderAttack(ChessmanType.Knight, new Size(4, 4), new Point(1, 2),
                 new[] { new Point(1, 2) });
@@ -73,10 +119,13 @@ namespace AttackSolverTest
         [Fact]
         public void KnightZero()
         {
-            var inst = FindImplementations().First();
+            var inst = FindImplementations().Single();
 
-            var res = inst.CountUnderAttack(ChessmanType.Knight, new Size(2, 2), new Point(1, 1),
-                new[] { new Point(1, 1) });
+            var size = new Size(2, 2);
+            var start = new Point(1, 1);
+            var obstacles = new[] { new Point(1, 1) };
+
+            var res = inst.CountUnderAttack(ChessmanType.Knight, size, start, obstacles);
             Assert.Equal(0, res);
 
         }
@@ -84,44 +133,109 @@ namespace AttackSolverTest
         [Fact]
         public void RookCenter()
         {
-            var inst = FindImplementations().First();
+            var inst = FindImplementations().Single();
 
-            var res = inst.CountUnderAttack(ChessmanType.Rook, new Size(4, 4), new Point(2, 2),
-                new[] { new Point(1, 1) });
+            var size = new Size(4, 4);
+            var start = new Point(2, 2);
+            var obstacles = new[] { new Point(1, 1) };
+
+            var res = inst.CountUnderAttack(ChessmanType.Rook, size, start, obstacles);
             Assert.Equal(6, res);
 
         }
         [Fact]
         public void RookCenterWObstacle()
         {
-            var inst = FindImplementations().First();
+            var inst = FindImplementations().Single();
 
-            var res = inst.CountUnderAttack(ChessmanType.Rook, new Size(4, 4), new Point(2, 2),
-                new[] { new Point(4, 2) });
+            var size = new Size(4, 4);
+            var start = new Point(2, 2);
+            var obstacles = new[] { new Point(4, 2)};
+
+            var res = inst.CountUnderAttack(ChessmanType.Rook, size, start, obstacles);
             Assert.Equal(5, res);
 
         }
         [Fact]
         public void RookCenterWObstaclesAround()
         {
-            var inst = FindImplementations().First();
+            var inst = FindImplementations().Single();
 
-            var res = inst.CountUnderAttack(ChessmanType.Rook, new Size(5, 5), new Point(3, 3),
-                new[] { new Point(1, 3), new Point(3, 1), new Point(3, 5), new Point(5, 3) });
+            var size = new Size(5, 5);
+            var start = new Point(3, 3);
+            var obstacles = new[] { new Point(1, 3), new Point(3, 1), new Point(3, 5), new Point(5, 3) };
+
+            var res = inst.CountUnderAttack(ChessmanType.Rook, size, start, obstacles);
             Assert.Equal(4, res);
 
         }
         [Fact]
         public void RookCorner()
         {
-            var inst = FindImplementations().First();
+            var inst = FindImplementations().Single();
 
-            var res = inst.CountUnderAttack(ChessmanType.Rook, new Size(3, 2), new Point(3, 2),
-                new[] { new Point(2, 1) });
+            var size = new Size(3, 2);
+            var start = new Point(3, 2);
+            var obstacles = new[] { new Point(2, 1)};
+
+            var res = inst.CountUnderAttack(ChessmanType.Rook, size, start, obstacles);
             Assert.Equal(3, res);
 
         }
 
+        [Fact]
+        public void BishopCenter()
+        {
+            var inst = FindImplementations().Single();
+
+            var size = new Size(5, 5);
+            var start = new Point(3, 3);
+            var obstacles = new[] { new Point(3, 1), new Point(4,3), new Point(3,4) };
+
+            var res = inst.CountUnderAttack(ChessmanType.Bishop, size, start, obstacles);
+            Assert.Equal(8, res);
+
+        }
+
+        [Fact]
+        public void BishopCorner()
+        {
+            var inst = FindImplementations().Single();
+
+            var size = new Size(10, 15);
+            var start = new Point(10, 15);
+            var obstacles = new[] { new Point(5, 1), new Point(3, 2), new Point(10, 14), new Point(9, 15) };
+
+            var res = inst.CountUnderAttack(ChessmanType.Bishop, size, start, obstacles);
+            Assert.Equal(9, res);
+
+        }
+        [Fact]
+        public void BishopCornerObstacles()
+        {
+            var inst = FindImplementations().Single();
+
+            var size = new Size(10, 15);
+            var start = new Point(9, 14);
+            var obstacles = new[] { new Point(10, 13), new Point(8, 13), new Point(8, 15), new Point(9, 15) };
+
+            var res = inst.CountUnderAttack(ChessmanType.Bishop, size, start, obstacles);
+            Assert.Equal(1, res);
+
+        }
+        [Fact]
+        public void BishopBig()
+        {
+            var inst = FindImplementations().Single();
+
+            var size = new Size(100000, 100000);
+            var start = new Point(100000, 100000);
+            var obstacles = new[] { new Point(10, 13), new Point(8, 13), new Point(8, 15), new Point(9, 15) };
+
+            var res = inst.CountUnderAttack(ChessmanType.Bishop, size, start, obstacles);
+            Assert.Equal(1, res);
+
+        }
 
         IList<IAttackCounter> FindImplementations()
         {

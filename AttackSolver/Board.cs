@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
+using System;
 
 namespace AttackSolver
 {
@@ -15,13 +16,20 @@ namespace AttackSolver
 
         void CreateBoard(Size boardSize)
         {
-            Grid = new Cell[boardSize.Width, boardSize.Height];
-            for (int i = 0; i < boardSize.Width; i++)
+            if(boardSize != null && !boardSize.IsEmpty && boardSize.Width > 0 && boardSize.Height > 0)
             {
-                for (int j = 0; j < boardSize.Height; j++)
+                Grid = new Cell[boardSize.Width, boardSize.Height];
+                for (int i = 0; i < boardSize.Width; i++)
                 {
-                    Grid[i, j] = new Cell(i, j);
+                    for (int j = 0; j < boardSize.Height; j++)
+                    {
+                        Grid[i, j] = new Cell(i, j);
+                    }
                 }
+            }
+            else
+            {
+                throw new ArgumentException("invalid board size");
             }
         }
 
@@ -29,7 +37,7 @@ namespace AttackSolver
         {
             foreach (var obstacle in obstacles)
             {
-                if (!(IsValidPoint(obstacle.X, obstacle.Y)))
+                if (IsValidPoint(obstacle.X-1, obstacle.Y-1))
                     Grid[obstacle.X-1, obstacle.Y-1].IsObstacle = true;
             }
         }
@@ -49,5 +57,6 @@ namespace AttackSolver
                 return true;
             }
         }
+        public bool IsValidPoint(Point point) => IsValidPoint(point.X, point.Y);
     }
 }
